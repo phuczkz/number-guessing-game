@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="stylewed.css">
+</head>
+
+<body>
+  <div class="Card">
+    <h1>Đoán Số???</h1>
+    <p id="remainingLives">Số lược còn lại </p>
+    <input placeholder="Hãy đoán một số" id="inputNum" />
+    <p id="lbResult"> Đoán số đi nào </p>
+    <button id="btResetGame">Reset game</button>
+  </div>
+
+  <script>
+    let btResetGame = document.getElementById("btResetGame");
+    let inputNum = document.getElementById("inputNum");
+    let lbResult = document.getElementById("lbResult");
+    let remainingLives = document.getElementById("remainingLives");
+
+    let randomNumber = 0;
+    let live = 5;
+
+    function newGame() {
+      remainingLives.innerText = "Bạn còn: " + live + " lượt";
+      randomNumber = Math.floor(Math.random() * 100) + 1;
+      live = 5;
+      inputNum.value = "";
+      console.log("New game created: ", randomNumber);
+    }
+    btResetGame.onclick = newGame;
+    function resetGame() {
+      mysteryNumber = Math.floor(Math.random() * 100) + 1;
+      live = 5;
+      document.documentElement.style.setProperty(
+        "--tube-percentage",
+        (5 - live) * 20 + "%"
+      );
+    }
+    btResetGame.onclick = () => {
+      live = 5;
+      lbResult.innerText = " Bạn đã reset game. Hãy đoán tiếp đi nào";
+      inputNum.value = "";
+      console.log("restart");
+      newGame();
+    };
+
+    inputNum.onkeypress = (key) => {
+      if (live == 0) {
+        return;
+      }
+
+      if (key.code == "Enter") {
+        console.log("Submit input number");
+        let guessNum = parseInt(inputNum.value);
+        console.log(guessNum);
+        inputNum.value = "";
+
+        if (guessNum == randomNumber) {
+          lbResult.innerText = "Bạn đoán đúng rồi kìa " + "Kết quả là: " + randomNumber;
+          return newGame();
+
+        } else if (guessNum < randomNumber) {
+          lbResult.innerText = "Số bạn đoán nhỏ hơn số bí mật đấy!!!";
+        } else {
+          lbResult.innerText = "Số bạn đoán lớn hơn số bí mật đấy!!!";
+        }
+        live--;
+        remainingLives.innerText = "Lượt còn lại: " + live;
+        if (live == 0) {
+          lbResult.innerText = "Oh noo. " + "kết quả là: " + randomNumber;
+          remainingLives.innerText = " bạn đã hết lượt chơi";
+        }
+        if (live == 0 && guessNum == randomNumber) {
+          lbResult.innerText = "Bạn đoán đúng rồi kìa! " + "Kết quả là: " + randomNumber;
+          return;
+        }
+
+        if (isNaN(guessNum) || guessNum.trim() === "") {
+          lbResult.innerText = "Vui lòng nhập một số, bạn nhập sai định dạng";
+          inputNum.value = "";
+          return;
+        }
+        guessNum = parseInt(guessNum);
+        console.log(guessNum);
+        inputNum.value = "";
+      }
+    };
+    newGame();
+  </script>
+</body>
+
+</html>
